@@ -1,0 +1,13 @@
+.Main-block {
+  width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(16, 90px);
+}
+.Main-block__content {
+  grid-column-start: 3;
+  grid-column-end: 15;
+  height: 100%;
+  margin-bottom: 40px;
+  background-color: #f6f6f6;
+}
+/*# sourceMappingURL=Main-block.css.map */

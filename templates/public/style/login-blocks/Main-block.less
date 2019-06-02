@@ -9,8 +9,27 @@
     grid-column-start: 2;
     grid-column-end: 11;
     height: @block-height;
+    display: flex;
+    flex-wrap: wrap;
     background-color: #f6f6f6;
+    justify-content: center;
+    align-items: center;
   }
+  &__fact-block{
+    height: 200px;
+    width: 4*@column-width;
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+        box-shadow: 0px 20px 51px -1px rgba(144,155,165,0.29);
+
+    &--l{
+      margin-right: 50px;
+    }
+    &--r{
+      margin-top: 34px;
+    }
+  }
+
 
   &__login-block{
     grid-column-start: 12;

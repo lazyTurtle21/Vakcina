@@ -7,7 +7,24 @@
   grid-column-start: 2;
   grid-column-end: 11;
   height: 500px;
+  display: flex;
+  flex-wrap: wrap;
   background-color: #f6f6f6;
+  justify-content: center;
+  align-items: center;
+}
+.Main-block__fact-block {
+  height: 200px;
+  width: 360px;
+  margin-bottom: 20px;
+  background-color: #FFFFFF;
+  box-shadow: 0px 20px 51px -1px rgba(144, 155, 165, 0.29);
+}
+.Main-block__fact-block--l {
+  margin-right: 50px;
+}
+.Main-block__fact-block--r {
+  margin-top: 34px;
 }
 .Main-block__login-block {
   grid-column-start: 12;
