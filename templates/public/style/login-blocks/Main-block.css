@@ -1,0 +1,16 @@
+.Main-block {
+  width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(16, 90px);
+}
+.Main-block__info-block {
+  grid-column-start: 2;
+  grid-column-end: 11;
+  height: 500px;
+  background-color: #f6f6f6;
+}
+.Main-block__login-block {
+  grid-column-start: 12;
+  grid-column-end: 16;
+}
+/*# sourceMappingURL=Main-block.css.map */

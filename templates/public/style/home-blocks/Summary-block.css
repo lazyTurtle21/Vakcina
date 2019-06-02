@@ -1,0 +1,45 @@
+.Summary-block {
+  height: 320px;
+  letter-spacing: 1px;
+  background-color: #f6f6f6;
+}
+.Summary-block__wrapper {
+  width: 325px;
+  margin: 0 auto;
+}
+.Summary-block__content-cell {
+  border-bottom: 1px solid #262525;
+  clear: both;
+  padding-top: 25px;
+}
+.Summary-block__icon {
+  width: 32px;
+  height: 32px;
+  float: right;
+}
+.Summary-block__title {
+  float: left;
+  clear: both;
+  margin: 20px 0 0;
+}
+.Summary-block__show-all {
+  float: right;
+  margin-top: 20px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #262525;
+}
+.Summary-block__sub-title {
+  margin: 0;
+  float: left;
+  font-style: italic;
+  font-size: 15px;
+}
+.Summary-block__sub-text {
+  clear: left;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  font-size: 15px;
+}
+/*# sourceMappingURL=Summary-block.css.map */

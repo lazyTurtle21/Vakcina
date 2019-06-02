@@ -1,0 +1,61 @@
+.Year-block {
+  height: 320px;
+  letter-spacing: 1px;
+}
+.Year-block__year {
+  background: rgba(244, 244, 244, 0.96);
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 155px;
+  height: 35px;
+  margin-top: 20px;
+  margin-left: 27px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-weight: bold;
+  font-size: 15px;
+}
+.Year-block__wrapper {
+  width: 720px;
+  margin: 0 auto;
+}
+.Year-block__content-cell {
+  border-bottom: 1px solid #262525;
+  clear: both;
+  padding-top: 25px;
+}
+.Year-block__small-icon {
+  width: 20px;
+  height: 20px;
+}
+.Year-block__icon {
+  width: 32px;
+  height: 32px;
+  float: right;
+}
+.Year-block__title {
+  float: left;
+  clear: both;
+  margin: 20px 0 0;
+}
+.Year-block__show-all {
+  float: right;
+  margin-top: 20px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #262525;
+}
+.Year-block__sub-title {
+  margin: 0;
+  float: left;
+  font-style: italic;
+  font-size: 15px;
+}
+.Year-block__sub-text {
+  clear: left;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  font-size: 15px;
+}
+/*# sourceMappingURL=Year-block.css.map */

@@ -1,0 +1,19 @@
+.Login-button {
+  width: 300px;
+  height: 55px;
+  background: #F7F7F7;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Login-button__logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+}
+.Login-button__text {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+}
+/*# sourceMappingURL=Login-button.css.map */

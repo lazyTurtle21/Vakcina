@@ -1,0 +1,37 @@
+@import "../variables";
+.Navigation{
+      width: @content-width;
+    display: grid;
+    grid-template-columns: repeat(16, @column-width);
+    margin: 0 auto;
+  &__button{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0.015em;
+    color: #262525;
+    text-transform: uppercase;
+
+    &--main{
+      grid-column-start: 4;
+      border-right: 1px solid #262525;
+      margin-left: 5px;
+    }
+    &--vaccine{
+      grid-column-start: 6;
+      grid-column-end: 8;
+      justify-self: center;
+    }
+    &--travel{
+      grid-column-end: 11;
+    }
+    &--news{
+      grid-column-start: 12;
+    }
+
+    &--selected{
+      color: #05c46b;
+    }
+  }
+}

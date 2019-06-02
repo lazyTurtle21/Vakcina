@@ -1,0 +1,18 @@
+.Login-block {
+  height: 500px;
+  background-color: #e1e1e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #262525;
+  letter-spacing: 1px;
+}
+.Login-block__text {
+  display: block;
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+.Login-block__button {
+  margin-bottom: 30px;
+}
+/*# sourceMappingURL=Login-block.css.map */
