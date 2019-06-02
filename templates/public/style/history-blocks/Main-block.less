@@ -1,0 +1,16 @@
+@import "../variables";
+
+.Main-block{
+  width: @content-width;
+  display: grid;
+  grid-template-columns: repeat(16, @column-width);
+
+    &__year-block{
+      grid-column-start: 4;
+      grid-column-end: 14;
+      background-color: #f6f6f6;
+      margin-bottom: 35px;
+  };
+
+
+}

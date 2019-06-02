@@ -1,0 +1,12 @@
+.Main-block {
+  width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(16, 90px);
+}
+.Main-block__year-block {
+  grid-column-start: 4;
+  grid-column-end: 14;
+  background-color: #f6f6f6;
+  margin-bottom: 35px;
+}
+/*# sourceMappingURL=Main-block.css.map */

@@ -1,0 +1,35 @@
+.Navigation {
+  width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(16, 90px);
+  margin: 0 auto;
+}
+.Navigation__button {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.015em;
+  color: #262525;
+  text-transform: uppercase;
+}
+.Navigation__button--main {
+  grid-column-start: 4;
+  border-right: 1px solid #262525;
+  margin-left: 5px;
+}
+.Navigation__button--vaccine {
+  grid-column-start: 6;
+  grid-column-end: 8;
+  justify-self: center;
+}
+.Navigation__button--travel {
+  grid-column-end: 11;
+}
+.Navigation__button--news {
+  grid-column-start: 12;
+}
+.Navigation__button--selected {
+  color: #05c46b;
+}
+/*# sourceMappingURL=Navigation.css.map */

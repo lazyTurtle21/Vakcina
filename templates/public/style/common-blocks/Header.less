@@ -1,0 +1,29 @@
+@import "../variables";
+.Header{
+  width: 100%;
+  height: @header-height;
+  background: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(48, 47, 47, 0.13);
+
+  &__content{
+    width: @content-width;
+    display: grid;
+    grid-template-columns: repeat(16, @column-width);
+    margin: 0 auto;
+  }
+  &__logo{
+    grid-column-start: 2;
+    margin-top: (@header-height - @logo-height)/2-8px;
+  }
+  &__my-profile{
+    grid-column-start: 14;
+    grid-column-end: 16;
+    font-size: 14px;
+    line-height: 21px;
+    border-left: 1px solid #262525;
+    height: 21px;
+    padding-left: 5px;
+    letter-spacing: 1px;
+    margin-top: (@header-height - @logo-height)/2 + 8px;
+  }
+}

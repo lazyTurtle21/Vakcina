@@ -1,0 +1,25 @@
+@import "../variables";
+
+.Main-block{
+  width: @content-width;
+  display: grid;
+  grid-template-columns: repeat(16, @column-width);
+
+  &__info-block{
+    grid-column-start: 2;
+    grid-column-end: 11;
+    height: @block-height;
+    background-color: #f6f6f6;
+  }
+  &__sidebar{
+    display: flex;
+    flex-direction: column;
+    grid-column-start: 12;
+      grid-column-end: 16;
+  }
+    &__summary-block{
+      margin-bottom: 25px;
+  };
+
+
+}
