@@ -23,6 +23,9 @@
   letter-spacing: 1px;
   font-weight: normal;
 }
+p {
+  letter-spacing: 1px;
+}
 .inputGroup {
   background-color: #fff;
   display: block;

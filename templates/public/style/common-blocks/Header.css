@@ -3,6 +3,7 @@
   height: 100px;
   background: #FFFFFF;
   box-shadow: 0 4px 15px rgba(48, 47, 47, 0.13);
+  z-index: 10;
 }
 .Header__content {
   width: 1440px;
