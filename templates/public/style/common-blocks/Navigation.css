@@ -4,6 +4,10 @@
   grid-template-columns: repeat(16, 90px);
   margin: 0 auto;
 }
+.Navigation__button:hover {
+  color: #05c46b;
+  cursor: pointer;
+}
 .Navigation__button {
   font-style: normal;
   font-weight: bold;

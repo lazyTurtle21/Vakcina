@@ -1,0 +1,6 @@
+.Info-block__map{
+    height: 400px;
+    width: 87%;
+    margin-top: 30px;
+    margin-left: calc((100% - 87%) / 2);
+}

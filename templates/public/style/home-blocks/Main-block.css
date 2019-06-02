@@ -6,7 +6,7 @@
 .Main-block__info-block {
   grid-column-start: 2;
   grid-column-end: 11;
-  height: 500px;
+  height: 560px;
   background-color: #f6f6f6;
 }
 .Main-block__sidebar {
