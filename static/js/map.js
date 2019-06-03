@@ -5,18 +5,14 @@ let map = tomtom.L.map('map', {
     zoom: 13
 });
 
-
 const initMap = () => {
+    // let coordinates = makeGetRequest("https://localhost:5000/hospitals/" +
+    //     document.getElementById("Info-block__search-form"));
+    //
     let coordinates = [];
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            coordinates = JSON.parse(this.responseText);
-        }
-    };
-    xhttp.open("GET", "https://localhost:5000/hospitals/" +
-        document.getElementById("Info-block__search-form"), true);
-    xhttp.send();
+    document.getElementsByClassName("Search-form__text")[0].innerHTML = "Ми знайшли " + coordinates.length +
+        " точок за вашим запитом.";
+    coordinates.map((x) => tomtom.L.marker([x["long"], x["lat"]]).addTo(map).bindPopup(x["name"]));
     document.getElementsByClassName("Search-form__text")[0].innerHTML = "Ми знайшли " + coordinates.length +
         " точок за вашим запитом.";
 
