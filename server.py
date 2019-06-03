@@ -6,9 +6,14 @@ app.url_map.strict_slashes = False
 blueprint = Blueprint("", __name__)
 
 
-@blueprint.route("/")
+@blueprint.route("/login")
 def home():
     return render_template("login.html")
+
+
+@blueprint.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 
 @blueprint.route("/home")
