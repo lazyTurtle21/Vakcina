@@ -29,6 +29,10 @@ def index():
 def home():
     return render_template('home.html')
 
+@main.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
 
 @main.route('/profile', methods=['POST'])
 def get_profile():
