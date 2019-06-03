@@ -5,21 +5,23 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../style/common-blocks/Layout.css">
-    <link rel="stylesheet" href="../style/common-blocks/Navigation.css">
-    <link rel="stylesheet" href="../style/home-blocks/Summary-block.css">
-    <link rel="stylesheet" href="../style/common-blocks/common.css">
-    <link rel="stylesheet" href="../style/home-blocks/Main-block.css">
-    <link rel="stylesheet" href="../style/common-blocks/Header.css">
-    <link rel="stylesheet" href="../style/vaccine-blocks/Search-form.css">
-    <link rel="stylesheet" href="../style/vaccine-blocks/Vaccine__map.css">
-    <link rel='stylesheet' type='text/css' href='../../../tomtom/map.css'/>
+    <link rel="stylesheet" href="../static/style/common-blocks/Layout.css">
+    <link rel="stylesheet" href="../static/style/common-blocks/Navigation.css">
+    <link rel="stylesheet" href="../static/style/home-blocks/Summary-block.css">
+    <link rel="stylesheet" href="../static/style/common-blocks/common.css">
+    <link rel="stylesheet" href="../static/style/home-blocks/Main-block.css">
+    <link rel="stylesheet" href="../static/style/common-blocks/Header.css">
+    <link rel="stylesheet" href="../static/style/vaccine-blocks/Search-form.css">
+    <link rel="stylesheet" href="../static/style/vaccine-blocks/Vaccine__map.css">
+    <link rel='stylesheet' type='text/css' href='../static/style/map.css'/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src='../../../tomtom/tomtom.min.js'></script>
+    <script src="{{ url_for('static', filename='js/tomtom.min.js') }}"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/vaccine.svg') }}">
+
     <title>Моя вакцина</title>
 
 </head>
-<body onload="initCalendar();return false;">
+<body>
 <div class="Layout">
     <header class="Header Layout__header">
         <div class="Header__content">
@@ -56,13 +58,15 @@
             <div class="Header__my-profile">Мій профіль</div>
         </div>
         <nav class="Navigation Header__navigation">
-            <a class="Navigation__button Navigation__button--main Navigation__button--selected">Головна</a>
-            <a class="Navigation__button Navigation__button--vaccine">Моя вакцина</a>
-            <a class="Navigation__button">Історія</a>
-            <a class="Navigation__button">Епідемії</a>
-            <a class="Navigation__button Navigation__button--travel">У подорож</a>
-            <a class="Navigation__button Navigation__button--news">Новини</a>
-            <a class="Navigation__button">Про нас</a>
+            <a class="Navigation__button Navigation__button--main" href="/home">Головна</a>
+            <a class="Navigation__button Navigation__button--vaccine Navigation__button--selected"
+               href="/search">Моя вакцина</a>
+            <a class="Navigation__button" href="/history">Історія</a>
+            <a class="Navigation__button" href="/epidemics">Епідемії</a>
+            <a class="Navigation__button Navigation__button--travel" href="/travel">У подорож</a>
+            <a class="Navigation__button Navigation__button--news" href="/news">Новини</a>
+            <a class="Navigation__button" href="/about">Про нас</a>
+
         </nav>
     </header>
     <main class="Main-block Layout__main-block">
@@ -97,7 +101,7 @@
         </section>
     </main>
 </div>
-<script type="text/javascript" src="js/map.js"></script>
-<script type="text/javascript" src="js/calendar.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/calendar.js')}}"></script>
 </body>
 </html>
