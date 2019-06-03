@@ -57,8 +57,8 @@ const postDate = (data) => {
 
 
 const RenderCalendar = async (input) => {
-    const questionContainer = document.querySelector(".Summary-block__wrapper");
-    input.map(post_data => questionContainer.appendChild(postDate(post_data)));
+    const calendarContainer = document.querySelector(".Summary-block__wrapper");
+    input.map(post_data => calendarContainer.appendChild(postDate(post_data)));
 };
 
 
