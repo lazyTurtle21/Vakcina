@@ -5,12 +5,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../style/common-blocks/Layout.css">
-    <link rel="stylesheet" href="../style/common-blocks/Navigation.css">
-    <link rel="stylesheet" href="../style/common-blocks/common.css">
-    <link rel="stylesheet" href="../style/profile-blocks/Main-block.css">
-    <link rel="stylesheet" href="../style/profile-blocks/Profile.css">
-    <link rel="stylesheet" href="../style/common-blocks/Header.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/Layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/Navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile-blocks/Main-block.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile-blocks/Profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/Header.css') }}">
+
     <title>Головна</title>
 </head>
 <body>
@@ -63,33 +64,30 @@
         <article class="Profile Main-block__content">
             <h1 class="Profile__title">Мій профіль</h1>
             <section class="Profile__column1">
-                <form>
+                <form method="POST" action="/profile">
                     <label for="fname">Ім'я</label>
                     <input type="text" id="fname" name="firstname">
-
                     <label for="lname">Прізвище</label>
                     <input type="text" id="lname" name="lastname">
-
                     <label for="sex">Стать</label>
                     <select id="sex" name="sex">
-                        <option value="australia">Жінка</option>
-                        <option value="canada">Чоловік</option>
-                        <option value="usa">Інше</option>
+                        <option value="1">Жінка</option>
+                        <option value="0">Чоловік</option>
+                        <option value="2">Інше</option>
                     </select>
-
                     <label for="loc">Місто</label>
                     <input type="text" id="loc" name="location">
-
                     <label for="dat">Дата народження</label>
                     <input type="date" id="dat" name="date">
-
                     <label for="alerg">Алергії</label>
                     <input type="text" id="alerg" name="alergies">
+                    <input type="submit" value="Зберегти">
                 </form>
             </section>
+
             <section class="Profile__column2">
                 <p>Отримані раніше щеплення:</p>
-                <form>
+                <form method="POST">
                     <div class="inputGroup">
                         <input type="checkbox" id="v1" name="v1" value="Гепатит B">
                         <label for="v1">Гепатит B</label>
@@ -130,9 +128,10 @@
                         <input type="checkbox" id="v10" name="v10" value="Туберкульоз">
                         <label for="v10">Туберкульоз</label>
                     </div>
+
                 </form>
             </section>
-            <input type="submit" value="Зберегти">
+
         </article>
     </main>
 </div>
