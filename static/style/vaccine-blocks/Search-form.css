@@ -1,7 +1,6 @@
-.Main-block{
+.Main-block {
   height: 600px;
 }
-
 .Search-form {
   align-self: center;
   display: flex;
@@ -33,6 +32,9 @@
   cursor: pointer;
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
+}
+.Search-form__button:hover {
+  background-color: #05984c;
 }
 .Search-form__text {
   text-align: center;

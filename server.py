@@ -10,6 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+login_manager.login_message = "Щоб продовжити роботу необхідно увійти"
 login_manager.init_app(app)
 
 app.url_map.strict_slashes = False
