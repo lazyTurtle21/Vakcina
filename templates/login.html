@@ -143,11 +143,11 @@
             <form class="Login-block__form" id="sign-in-block" method="POST" action="/login">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                <div class="message" style="color: #e03535;display: flex;max-width: 309px;" >{{ messages[0] }}</div>
+                <div class="message" style="color: green;display: flex;max-width: 309px;" >{{ messages[0] }}</div>
                 {% endif %}
                 {% endwith %}
-                <input class="Login-block__input" type="email" name="email" placeholder="Your Email" autofocus="">
-                <input class="Login-block__input" type="password" name="password" placeholder="Your Password">
+                <input class="Login-block__input" type="email" name="email" placeholder="Емейл" autofocus="">
+                <input class="Login-block__input" type="password" name="password" placeholder="Пароль">
                 <label class="Login-block__checkbox">
                     <input type="checkbox">
                     Запам'ятати мене

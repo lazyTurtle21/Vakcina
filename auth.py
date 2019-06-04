@@ -45,9 +45,10 @@ def signup_post():
         db.session.add(
             ClientLog(name=name, email=email, password=generate_password_hash(password, method='sha256'), first=True))
         db.session.commit()
+        flash('Операція успішно завершена. Тепер увійдіть')
     else:
         flash('Користувач з такою адресою існує. Ви можете увійти на сторіку')
-        
+
     return redirect(url_for('auth.login'))
 
 
