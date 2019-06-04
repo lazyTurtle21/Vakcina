@@ -1,0 +1,16 @@
+.Counter {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.Counter--l {
+  margin-right: 90px;
+}
+.Counter__text {
+  width: 71%;
+  letter-spacing: 1px;
+  font-size: 14px;
+  text-align: center;
+}

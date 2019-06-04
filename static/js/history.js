@@ -1,6 +1,12 @@
+const getJSON = async (link) => {
+    return fetch(link)
+        .then((response)=>response.json())
+        .then((responseJson)=>{return responseJson});
+};
+
 const ConvertToDMY = (date) => {
     let split_date = date.split('-');
-    return new Date(split_date[1] + '/' + split_date[0] + '/' + split_date[2]);
+    return new Date(split_date[0] + '/' + split_date[1] + '/' + split_date[2]);
 };
 
 const compareDates = (date1, date2) =>{
@@ -9,21 +15,9 @@ const compareDates = (date1, date2) =>{
     return 0;
 };
 
-const getDoneVaccines = (id) => {
-    let vaccines_done = [{"vacc_id" : "Правець", "is_done" : true}, {"vacc_id" : "Туберкульоз", "is_done" : true}];
-    // let vaccines_age = getVaccinesDates();  [{"name" : "vacc_name1", age: 2}, {""name" : "vacc_name2", age: 72}]
-    let vaccines_age = [{"vacc_id" : "Правець", "age": 312}, {"vacc_id" : "Туберкульоз", "age": 231}];
-
-    // let vaccines_done = [];
-    // fetch("/vaccines/done/" + id.toString())
-    //     .then((res) => res.json())
-    //     .then((res) => {vaccines_done = res;});
-    //
-    // let vaccines_age = [];
-    // fetch("/vaccines/age/")
-    //     .then((res) => res.json())
-    //     .then((res) => {vaccines_age = res;});
-
+const getDoneVaccines = async (id) => {
+    let vaccines_done = await getJSON("/vacc_control/" + id.toString());
+    let vaccines_age = await getJSON("/age_vaccination");
     return vaccines_age.filter(x => vaccines_done.find(el => el["id"] === x["id"])["is_done"]);
 };
 
@@ -86,23 +80,20 @@ const GetFullPost = async (year, data) => {
 };
 
 
-
-const initHistory = () => {
-    // let client_birth = client["date_of_birth"];
-    let client = {};
-    let id = 1;
-    fetch("/clients/" + id.toString())
-        .then((res) => res.json())
-        .then((res) => {client = res;});
-
-    if (client.length === 0){
-
+const initHistory = async () => {
+    let current_user = await getJSON("/profile/current_user");
+    if (current_user.length === 0 || !current_user["id"]){
+        return;
+    }
+    let client = await getJSON("/clients/" + current_user["id"].toString());
+    if (client.length === 0 || !client["date_of_birth"]){
+        return;
     }
 
-    let client_birth = "";
-    let client_id = 1;
+    let client_id = current_user["id"];
+    let client_birth = client["date_of_birth"];
 
-    let vaccines = getDoneVaccines(client_id);
+    let vaccines = await getDoneVaccines(client_id);
     vaccines.map(x => {x["age"] = getDate(x["age"], ConvertToDMY(client_birth))});
     vaccines = vaccines.filter(x => x["age"]);
     vaccines.sort((x, y) => {return compareDates(x["age"], y["age"]);});
@@ -124,7 +115,6 @@ const initHistory = () => {
             GetFullPost(last_event + '-' + first_event, other_years_events);
         }
     }
-    // console.log(vaccines);
     if (other_years_events.length === 0 && current_year_events.length === 0){
         GetFullPost(today.getFullYear(), [{"vacc_id": "У вас ще немає зроблених вакцин.", "age":today}]);
     }

@@ -1,0 +1,24 @@
+.Main-block {
+  width: 1440px;
+  display: grid;
+  grid-template-columns: repeat(16, 90px);
+}
+.Main-block__info-block {
+  grid-column-start: 2;
+  grid-column-end: 11;
+  height: 560px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: -3em;
+}
+.Main-block__sidebar {
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 12;
+  grid-column-end: 16;
+}
+.Main-block__summary-block {
+  margin-bottom: 25px;
+}

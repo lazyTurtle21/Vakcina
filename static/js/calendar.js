@@ -6,6 +6,15 @@ const getDate = (months, birth_date)  => {
     return birth_date;
 };
 
+const getJSON = async (link) => {
+    return fetch(link)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            return responseJson;
+        });
+};
+
+
 const ConvertToDMY = (date) => {
     let split_date = date.split('-');
     return new Date(split_date[1] + '/' + split_date[0] + '/' + split_date[2]);
@@ -16,6 +25,7 @@ const compareDates = (date1, date2) =>{
     if (date1 < date2){return -1;}
     return 0;
 };
+
 
 const differenceDate = (date) => {
     let today = new Date();
@@ -62,29 +72,32 @@ const RenderCalendar = async (input) => {
 };
 
 
-const getNotDoneVaccines = (id) => {
-    let vaccines_done = [{"vacc_id" : "Правець", "is_done" : false}, {"vacc_id" : "Туберкульоз", "is_done" : false}];
-    // let vaccines_age = getVaccinesDates();  [{"name" : "vacc_name1", age: 2}, {""name" : "vacc_name2", age: 72}]
-    let vaccines_age = [{"vacc_id" : "Правець", "age": 312}, {"vacc_id" : "Туберкульоз", "age": 231}];
-    vaccines_age = vaccines_age.filter(x => !vaccines_done.find(el => el["vacc_id"] === x["vacc_id"])["is_done"]);
-    return vaccines_age;
+const getNotDoneVaccines = async (id) => {
+    let vaccines_done = await getJSON("/vacc_control/" + id.toString());
+    let vaccines_age = await getJSON("/age_vaccination");
+    return vaccines_age.filter(x => !vaccines_done.find(el => el["vacc_id"] === x["vacc_id"])["is_done"]);
 };
 
 
-const initCalendar = () => {
-    let client_id = 2;
-    // let client = getClient(1);
-    // if (client === {}){
-    // }
-    // let client_birth = client["date_of_birth"];
-    let client_birth = "28-03-2000";
-    // let vaccines_done = getVaccinesDone(1);
-    let vaccines_age = getNotDoneVaccines(client_id);
-    vaccines_age.map((x) => {x["age"] = getDate(x["age"], ConvertToDMY(client_birth))});
-    vaccines_age = vaccines_age.filter(x => x["age"]);
-    vaccines_age.sort((x, y) => {return compareDates(x["age"], y["age"]);});
-    // vaccines_age.map(x => x["vacc_id"] = getVaccName(x["vac__id"]));
-    RenderCalendar(vaccines_age.slice(0, vaccines_age.length > 2 ? 3: vaccines_age.length));
+const initCalendar = async () => {
+    let current_user = await getJSON("/profile/current_user");
+    if (current_user.length === 0 || !current_user["id"]){
+        return;
+    }
+    let client = await getJSON("/clients/" + current_user["id"].toString());
+    if (client.length === 0 || !client["date_of_birth"]){
+        return;
+    }
+
+    let client_id = current_user["id"];
+    let client_birth = client["date_of_birth"];
+    let vaccines = await getNotDoneVaccines(client_id);
+
+    vaccines.map((x) => {x["age"] = getDate(x["age"], ConvertToDMY(client_birth))});
+    vaccines = vaccines.filter(x => x["age"]);
+    vaccines.sort((x, y) => {return compareDates(x["age"], y["age"]);});
+    vaccines.map(async x => x["vacc_id"] = await getJSON("/vaccines/" + x["vacc_id"])["name"]);
+    RenderCalendar(vaccines.slice(0, vaccines.length > 2 ? 3: vaccines.length));
 };
 
 initCalendar();
