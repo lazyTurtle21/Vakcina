@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="../static/style/common-blocks/Navigation.css">
     <link rel="stylesheet" href="../static/style/home-blocks/Summary-block.css">
     <link rel="stylesheet" href="../static/style/common-blocks/common.css">
-    <link rel="stylesheet" href="../static/style/home-blocks/Main-block.css">
+    <link rel="stylesheet" href="../static/style/vaccine-blocks/Main-block.css">
+        <link rel="stylesheet" href="../static/style/common-blocks/Dropdown.css">
     <link rel="stylesheet" href="../static/style/common-blocks/Header.css">
     <link rel="stylesheet" href="../static/style/vaccine-blocks/Search-form.css">
     <link rel="stylesheet" href="../static/style/vaccine-blocks/Vaccine__map.css">
@@ -55,18 +56,22 @@
                     </clipPath>
                 </defs>
             </svg>
-            <a class="Header__my-profile" href="/profile">Мій профіль</a>
+            <div class="Dropdown Header__my-profile">
+                <span>Мій профіль</span>
+                <div class="Dropdown__content">
+                    <a class="Dropdown__item Dropdown__item--upper" href="#">Редагувати</a>
+                    <a class="Dropdown__item Dropdown__item--lower" href="#">Вийти</a>
+                </div>
+            </div>
         </div>
         <nav class="Navigation Header__navigation">
-            <a class="Navigation__button Navigation__button--main" href="/home">Головна</a>
-            <a class="Navigation__button Navigation__button--vaccine Navigation__button--selected"
-               href="/search">Моя вакцина</a>
+            <a class="Navigation__button Navigation__button--main Navigation__button--selected" href="/home">Головна</a>
+            <a class="Navigation__button Navigation__button--vaccine" href="/search">Моя вакцина</a>
             <a class="Navigation__button" href="/history">Історія</a>
             <a class="Navigation__button" href="/epidemics">Епідемії</a>
             <a class="Navigation__button Navigation__button--travel" href="/travel">У подорож</a>
             <a class="Navigation__button Navigation__button--news" href="/news">Новини</a>
             <a class="Navigation__button" href="/about">Про нас</a>
-
         </nav>
     </header>
     <main class="Main-block Layout__main-block">

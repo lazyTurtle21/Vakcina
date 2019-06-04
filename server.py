@@ -13,6 +13,7 @@ app.register_blueprint(app_db)
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
+login_manager.login_message = "Щоб продовжити роботу необхідно увійти"
 login_manager.init_app(app)
 
 app.url_map.strict_slashes = False

@@ -16,6 +16,7 @@
   letter-spacing: 0.015em;
   color: #262525;
   text-transform: uppercase;
+  text-decoration: none;
 }
 .Navigation__button--main {
   grid-column-start: 4;

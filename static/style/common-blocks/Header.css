@@ -25,5 +25,10 @@
   padding-left: 5px;
   letter-spacing: 1px;
   margin-top: 27px;
+  color: #262525;
+  text-decoration: none;
+}
+.Header__my-profile:hover {
+  color: #05c46b;
 }
 /*# sourceMappingURL=Header.css.map */
