@@ -57,15 +57,15 @@ const postDate = (data) => {
 
 
 const RenderCalendar = async (input) => {
-    const questionContainer = document.querySelector(".Summary-block__wrapper");
-    input.map(post_data => questionContainer.appendChild(postDate(post_data)));
+    const calendarContainer = document.querySelector(".Summary-block__wrapper");
+    input.map(post_data => calendarContainer.appendChild(postDate(post_data)));
 };
 
 
 const getNotDoneVaccines = (id) => {
-    let vaccines_done = [{"vacc_id" : 1, "is_done" : false}, {"vacc_id" : 2, "is_done" : false}];
+    let vaccines_done = [{"vacc_id" : "Правець", "is_done" : false}, {"vacc_id" : "Туберкульоз", "is_done" : false}];
     // let vaccines_age = getVaccinesDates();  [{"name" : "vacc_name1", age: 2}, {""name" : "vacc_name2", age: 72}]
-    let vaccines_age = [{"vacc_id" : 1, "age": 312}, {"vacc_id" : 2, "age": 231}];
+    let vaccines_age = [{"vacc_id" : "Правець", "age": 312}, {"vacc_id" : "Туберкульоз", "age": 231}];
     vaccines_age = vaccines_age.filter(x => !vaccines_done.find(el => el["vacc_id"] === x["vacc_id"])["is_done"]);
     return vaccines_age;
 };

@@ -23,9 +23,6 @@
 .Main-block__fact-block--l {
   margin-right: 50px;
 }
-.Main-block__fact-block--r {
-  margin-top: 34px;
-}
 .Main-block__login-block {
   grid-column-start: 12;
   grid-column-end: 16;
