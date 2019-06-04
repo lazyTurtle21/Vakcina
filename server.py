@@ -29,10 +29,12 @@ def index():
 def home():
     return render_template('home.html')
 
+
 @main.route('/profile')
 @login_required
 def profile():
     return render_template('profile.html')
+
 
 @main.route('/profile', methods=['POST'])
 def get_profile():
@@ -88,6 +90,7 @@ from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(main)
 app.register_blueprint(blueprint, url_prefix="/")
+
 
 if __name__ == '__main__':
     db.create_all()

@@ -10,15 +10,19 @@ const compareDates = (date1, date2) =>{
 };
 
 const getDoneVaccines = (id) => {
-    let vaccines_done = [];
-    fetch("/vaccines/done/" + id.toString())
-        .then((res) => res.json())
-        .then((res) => {vaccines_done = res;});
+    let vaccines_done = [{"vacc_id" : "Правець", "is_done" : true}, {"vacc_id" : "Туберкульоз", "is_done" : true}];
+    // let vaccines_age = getVaccinesDates();  [{"name" : "vacc_name1", age: 2}, {""name" : "vacc_name2", age: 72}]
+    let vaccines_age = [{"vacc_id" : "Правець", "age": 312}, {"vacc_id" : "Туберкульоз", "age": 231}];
 
-    let vaccines_age = [];
-    fetch("/vaccines/age/")
-        .then((res) => res.json())
-        .then((res) => {vaccines_age = res;});
+    // let vaccines_done = [];
+    // fetch("/vaccines/done/" + id.toString())
+    //     .then((res) => res.json())
+    //     .then((res) => {vaccines_done = res;});
+    //
+    // let vaccines_age = [];
+    // fetch("/vaccines/age/")
+    //     .then((res) => res.json())
+    //     .then((res) => {vaccines_age = res;});
 
     return vaccines_age.filter(x => vaccines_done.find(el => el["id"] === x["id"])["is_done"]);
 };
