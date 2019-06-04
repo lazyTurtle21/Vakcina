@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from flask_login import LoginManager
 from models import Client, ClientLog, app, db
 
-
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
@@ -29,21 +28,31 @@ def index():
 def home():
     return render_template('home.html')
 
+
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html')
+    cli = Client.query.filter_by(id=current_user.id).first()
+    return render_template('profile.html', client=cli)
+
 
 @main.route('/profile', methods=['POST'])
 def get_profile():
     cli = Client.query.filter_by(id=current_user.id).first()
+
     if cli is None:
-        client = Client(id=current_user.id, first_name=request.form.get('firstname'),
-                        last_name=request.form.get('lastname'),
-                        sex=request.form.get('sex'),
-                        date_of_birth=request.form.get('date'), location=request.form.get('location'))
-        db.session.add(client)
-        db.session.commit()
+        cli = Client(id=current_user.id, first_name=request.form.get('firstname'),
+                     last_name=request.form.get('lastname'),
+                     sex=request.form.get('sex'),
+                     date_of_birth=request.form.get('date'), location=request.form.get('location'))
+        db.session.add(cli)
+    else:
+        cli.first_name = request.form.get('firstname')
+        cli.last_name = request.form.get('lastname')
+        cli.sex = request.form.get('sex')
+        cli.date_of_birth = request.form.get('date')
+        cli.location = request.form.get('location')
+    db.session.commit()
     return redirect(url_for('main.home'))
 
 

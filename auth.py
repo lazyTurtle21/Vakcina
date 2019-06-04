@@ -19,14 +19,12 @@ def login_post():
     remember = True if request.form.get('remember') else False
     user = ClientLog.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
+        flash("Перевірте вказані дані і попробуйте ще раз")
         return redirect(url_for('auth.login'))
     login_user(user, remember=remember)
-    print(user.first)
     if user.first == True:
         user.first = False
         db.session.commit()
-        print(user.first)
         return redirect(url_for('main.profile'))
     return redirect(url_for('main.home'))
 
@@ -43,13 +41,13 @@ def signup_post():
     password = request.form.get('password')
     user = ClientLog.query.filter_by(
         email=email).first()
-    if user:
-        flash('Email address already exists')
-        return redirect(url_for('auth.signup'))
-    db.session.add(
-        ClientLog(name=name, email=email, password=generate_password_hash(password, method='sha256'), first=True))
-    db.session.commit()
-    print(ClientLog.query.all())
+    if user is None:
+        db.session.add(
+            ClientLog(name=name, email=email, password=generate_password_hash(password, method='sha256'), first=True))
+        db.session.commit()
+    else:
+        flash('Користувач з такою адресою існує. Ви можете увійти на сторіку')
+        
     return redirect(url_for('auth.login'))
 
 

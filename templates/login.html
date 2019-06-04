@@ -5,13 +5,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/Layout.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-blocks/Main-block.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/common.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-blocks/Login-block.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/common-blocks/Header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-blocks/Fact-block.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-blocks/Login-button.css') }}">
+    <link rel="stylesheet" href="../static/style/common-blocks/Layout.css">
+    <link rel="stylesheet" href="../static/style/login-blocks/Main-block.css">
+    <link rel="stylesheet" href="../static/style/common-blocks/common.css">
+    <link rel="stylesheet" href="../static/style/login-blocks/Login-block.css">
+    <link rel="stylesheet" href="../static/style/common-blocks/Header.css">
+    <link rel="stylesheet" href="../static/style/login-blocks/Fact-block.css">
+    <link rel="stylesheet" href="../static/style/login-blocks/Login-button.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Document</title>
 </head>
@@ -134,38 +134,33 @@
 
         <div class="Login-block">
             <div class="Login-block__head">
-                <button class="Login-block__toggle Login-block__toggle--selected" id="sign-in-button">Sign in</button>
-                <button class="Login-block__toggle" id="register-button">Register</button>
+                <button class="Login-block__toggle Login-block__toggle--selected" id="sign-in-button">Вхід</button>
+                <button class="Login-block__toggle" id="register-button">Реєстрація</button>
 
             </div>
             <form class="Login-block__form" id="sign-in-block" method="POST" action="/login">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="message" style="color: #e03535;display: flex;max-width: 309px;" >{{ messages[0] }}</div>
+                {% endif %}
+                {% endwith %}
                 <input class="Login-block__input" type="email" name="email" placeholder="Your Email" autofocus="">
                 <input class="Login-block__input" type="password" name="password" placeholder="Your Password">
                 <label class="Login-block__checkbox">
                     <input type="checkbox">
-                    Remember me
+                    Запам'ятати мене
                 </label>
 
-                <button class="Login-block__button">Login</button>
+                <button class="Login-block__button">Вхід</button>
 
             </form>
 
             <form class="Login-block__form" id="register-block" method="POST" action="/signup">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class="notification is-danger">
-                            {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
-                        </div>
-                    {% endif %}
-                {% endwith %}
-                <input class="Login-block__input" type="text" name="name" placeholder="Name" autofocus="">
-                <input class="Login-block__input" type="email" name="email" placeholder="Email">
-                <input class="Login-block__input" type="password" name="password" placeholder="Password">
-                <label class="Login-block__checkbox">
-                    <input type="checkbox">
-                    Remember me
-                </label>
-                <button class="Login-block__button">Sign up</button>
+
+                <input class="Login-block__input" type="text" name="name" placeholder="Логін" autofocus="">
+                <input class="Login-block__input" type="email" name="email" placeholder="Емейл">
+                <input class="Login-block__input" type="password" name="password" placeholder="Пароль">
+                <button class="Login-block__button">Зареєструватись</button>
             </form>
 
 
