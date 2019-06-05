@@ -1,15 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from flask_login import LoginManager
-from models import Clients, ClientLog, app, db
-from clients_controller import app_db
+from models import Clients, ClientLog, app, db, VaccControl, Vaccines
+import datetime
 
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
-app.config['JSON_AS_ASCII'] = False
-app.register_blueprint(app_db)
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -38,6 +36,9 @@ def home():
 def profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
     return render_template('profile.html', client=cli)
+                            #треба іннер джоін
+                           # ,vaccs=[Vaccines.query.filter_by(id=l.vacc_id).first().name for l in
+                           #        VaccControl.query.filter_by(client_id=current_user.id).all()])
 
 
 @main.route('/profile', methods=['POST'])
@@ -49,6 +50,16 @@ def get_profile():
                       last_name=request.form.get('lastname'),
                       sex=request.form.get('sex'),
                       date_of_birth=request.form.get('date'), location=request.form.get('location'))
+
+        for i in range(1, 11):
+            if request.form.get('v{}'.format(i)) is not None:
+                # if request.form.get('v{}'.format(i)) is not None:
+                #     v = Vaccines(name=request.form.get('v{}'.format(i)))
+                #     db.session.add(v)
+                vacc = VaccControl(client_id=current_user.id,
+                                   vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))),
+                                                                    date=datetime.date.today().isoformat())
+                db.session.add(vacc)
         db.session.add(cli)
     else:
         cli.first_name = request.form.get('firstname')
@@ -57,13 +68,12 @@ def get_profile():
         cli.date_of_birth = request.form.get('date')
         cli.location = request.form.get('location')
     db.session.commit()
+
+    if request.form.get('firstname') == '' or request.form.get('lastname') == '' or request.form.get(
+            'date') == '' or request.form.get('location') == '':
+        flash("*")
+        return redirect(url_for('main.profile'))
     return redirect(url_for('main.home'))
-
-
-@login_required
-@blueprint.route("/profile/current_user")
-def get_current_user():
-    return jsonify({"id": current_user.id})
 
 
 @blueprint.route("/search")

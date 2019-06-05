@@ -29,7 +29,7 @@ class Clients(db.Model, DictMixin):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     sex = db.Column(db.Integer, nullable=False)
-    date_of_birth = db.Column(db.String(255), nullable=False)
+    date_of_birth = db.Column(db.String(15), nullable=False)
     location = db.Column(db.String(255), nullable=False)
 
     def __repr__(self):
@@ -53,14 +53,14 @@ class Vaccines(db.Model):
 
 class VaccControl(db.Model):
     __tablename__ = 'vacc_control'
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True)
-    vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True)
-    is_done = db.Column(db.Boolean, nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True, unique=False)
+    vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True, unique=False)
+    date = db.Column(db.String(15), primary_key=True)
 
     def __repr__(self):
         return str({'client_id': self.client_id,
                     'vacc_id': self.vacc_id,
-                    'is_done': self.is_done})
+                    "date": self.date})
 
 
 class DictMixin(object):
@@ -105,7 +105,7 @@ class Additional(db.Model, DictMixin):
 class AgeVaccination(db.Model, DictMixin):
     __tablename__ = "age_vaccination"
     vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True)
-    age = db.Column(db.Float, nullable=False)
+    age = db.Column(db.Float, primary_key=True)
 
     def __repr__(self):
         return str({'vacc_id': self.vacc_id,
@@ -138,21 +138,19 @@ class PresenceIn(db.Model, DictMixin):
                     'num_present': self.num_present})
 
 
-class Medicines(db.Model, DictMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-
-    def __repr__(self):
-        return str({'id': self.id,
-                    'name': self.name})
-
-
-class Allergies(db.Model, DictMixin):
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True)
-    medicine_id = db.Column(db.Integer, db.ForeignKey('medicines.id'), primary_key=True)
-    allergy = db.Column(db.Boolean)
-
-    def __repr__(self):
-        return str({'client_id': self.client_id,
-                    'medicine_id': self.medicine_id,
-                    'allergy': self.allergy})
+# class Medicines(db.Model, DictMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(255), nullable=False)
+#
+#     def __repr__(self):
+#         return str({'id': self.id,
+#                     'name': self.name})
+#
+#
+# class Allergies(db.Model, DictMixin):
+#     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True)
+#     medicine_id = db.Column(db.Integer, db.ForeignKey('medicines.id'), primary_key=True)
+#
+#     def __repr__(self):
+#         return str({'client_id': self.client_id,
+#                     'medicine_id': self.medicine_id})

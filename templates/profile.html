@@ -53,13 +53,13 @@
             <div class="Dropdown Header__my-profile">
                 <span>Мій профіль</span>
                 <div class="Dropdown__content">
-                    <a class="Dropdown__item Dropdown__item--upper" href="#">Редагувати</a>
-                    <a class="Dropdown__item Dropdown__item--lower" href="#">Вийти</a>
+                          <a class="Dropdown__item Dropdown__item--upper" href="/profile">Редагувати</a>
+                    <a class="Dropdown__item Dropdown__item--lower" href="/logout">Вийти</a>
                 </div>
             </div>
         </div>
         <nav class="Navigation Header__navigation">
-            <a class="Navigation__button Navigation__button--main Navigation__button--selected" href="/home">Головна</a>
+            <a class="Navigation__button Navigation__button--main " href="/home">Головна</a>
             <a class="Navigation__button Navigation__button--vaccine" href="/search">Моя вакцина</a>
             <a class="Navigation__button" href="/history">Історія</a>
             <a class="Navigation__button" href="/epidemics">Епідемії</a>
@@ -73,9 +73,12 @@
             <h1 class="Profile__title">Мій профіль</h1>
             <form class="Profile" method="POST" action="/profile">
             <section class="Profile__column1">
-                    <label for="fname">Ім'я</label>
+                     {% with messages = get_flashed_messages() %}
+
+
+                    <label for="fname">Ім'я  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
                     <input type="text" id="fname" name="firstname" value={{ client.first_name}}>
-                    <label for="lname">Прізвище</label>
+                    <label for="lname">Прізвище  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
                     <input type="text" id="lname" name="lastname" value={{ client.last_name}}>
                     <label for="sex" >Стать</label>
                     <select id="sex" name="sex" >
@@ -83,56 +86,58 @@
                         <option value="0">Чоловік</option>
                         <option value="2">Інше</option>
                     </select>
-                    <label for="loc">Місто</label>
+                    <label for="loc">Місто  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
                     <input type="text" id="loc" name="location" value={{ client.location}}>
-                    <label for="dat">Дата народження</label>
+                    <label for="dat">Дата народження  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
+
                     <input type="date" id="dat" name="date" value={{ client.date_of_birth}}>
                     <label for="alerg">Алергії</label>
                     <input type="text" id="alerg" name="alergies">
+                         {% if messages %} <div class="message" style="color: #ec5643;display: flex;max-width: 309px;" > * Обов'язкове поле </div>{% endif %}
                     <input type="submit" value="Зберегти">
-
+ {% endwith %}
             </section>
 
             <section class="Profile__column2">
-                <p>Отримані раніше щеплення:</p>
+                <p>Отримані щеплення за останні 2 роки:</p>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v1" name="v1" value="Гепатит B">
+                        <input type="checkbox" id="v1" name="v1" value="Гепатит B" {% if "Гепатит B" in vaccs %} checked{% endif %}>
                         <label for="v1">Гепатит B</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v2" name="v2" value="Дифтерія">
+                        <input type="checkbox" id="v2" name="v2" value="Дифтерія" {% if "Дифтерія" in vaccs %} checked{% endif %}>
                         <label for="v2">Дифтерія</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v3" name="v3" value="Кашлюк">
+                        <input type="checkbox" id="v3" name="v3" value="Кашлюк" {% if "Кашлюк" in vaccs %} checked{% endif %}>
                         <label for="v3">Кашлюк</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v4" name="v4" value="Правець">
+                        <input type="checkbox" id="v4" name="v4" value="Правець" {% if "Правець" in vaccs %} checked{% endif %}>
                         <label for="v4">Правець</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v5" name="v5" value="Поліомієліт">
+                        <input type="checkbox" id="v5" name="v5" value="Поліомієліт" {% if "Поліомієліт" in vaccs %} checked{% endif %}>
                         <label for="v5">Поліомієліт</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v6" name="v6" value="Гемофільна інфекція">
+                        <input type="checkbox" id="v6" name="v6" value="Гемофільна інфекція" {% if "Гемофільна інфекція" in vaccs %} checked{% endif %}>
                         <label for="v6">Гемофільна інфекція</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v7" name="v7" value="Кір">
+                        <input type="checkbox" id="v7" name="v7" value="Кір" {% if "Кір" in vaccs %} checked{% endif %}>
                         <label for="v7">Кір</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v8" name="v8" value="Краснуха">
+                        <input type="checkbox" id="v8" name="v8" value="Краснуха" {% if "Краснуха" in vaccs %} checked{% endif %}>
                         <label for="v8">Краснуха</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v9" name="v9" value="Паротит">
+                        <input type="checkbox" id="v9" name="v9" value="Паротит" {% if "Паротит" in vaccs %} checked{% endif %}>
                         <label for="v9">Паротит</label>
                     </div>
                     <div class="inputGroup">
-                        <input type="checkbox" id="v10" name="v10" value="Туберкульоз">
+                        <input type="checkbox" id="v10" name="v10" value="Туберкульоз" {% if "Туберкульоз" in vaccs %} checked{% endif %}>
                         <label for="v10">Туберкульоз</label>
                     </div>
 
