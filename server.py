@@ -8,6 +8,13 @@ main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
+
+#TODO: переробити на mysql з sqllite
+# host = os.environ.get('DB_HOST', 'localhost')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
+#     user='user', password='password', database='vakcina', host=host)
+
+
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -35,10 +42,9 @@ def home():
 @login_required
 def profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
-    return render_template('profile.html', client=cli)
-                            #треба іннер джоін
-                           # ,vaccs=[Vaccines.query.filter_by(id=l.vacc_id).first().name for l in
-                           #        VaccControl.query.filter_by(client_id=current_user.id).all()])
+    return render_template('profile.html', client=cli, vaccs=[l.name for l in
+                                                              db.session.query(Vaccines).join(VaccControl).filter_by(
+                                                                  client_id=current_user.id).all()])
 
 
 @main.route('/profile', methods=['POST'])
@@ -53,12 +59,12 @@ def get_profile():
 
         for i in range(1, 11):
             if request.form.get('v{}'.format(i)) is not None:
-                # if request.form.get('v{}'.format(i)) is not None:
-                #     v = Vaccines(name=request.form.get('v{}'.format(i)))
-                #     db.session.add(v)
+                # v = Vaccines(name=request.form.get('v{}'.format(i)))
+                # db.session.add(v)
+
                 vacc = VaccControl(client_id=current_user.id,
-                                   vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))),
-                                                                    date=datetime.date.today().isoformat())
+                                   vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
+                                   date=datetime.date.today().isoformat())
                 db.session.add(vacc)
         db.session.add(cli)
     else:
