@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user
 from flask_login import LoginManager
+from clients_controller import app_db
 from models import Clients, ClientLog, app, db, VaccControl, Vaccines
 import datetime
 
@@ -8,12 +9,13 @@ main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
+app.config['JSON_AS_ASCII'] = False
+app.register_blueprint(app_db)
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.login_message = "Щоб продовжити роботу необхідно увійти"
 login_manager.init_app(app)
-
 app.url_map.strict_slashes = False
 
 blueprint = Blueprint("", __name__)
@@ -29,6 +31,12 @@ def index():
 @login_required
 def home():
     return render_template('home.html')
+
+
+@login_required
+@blueprint.route("/current_user")
+def get_current_user():
+    return jsonify({"id": current_user.id})
 
 
 @main.route('/profile')
