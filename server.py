@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+import os
+from flask import Blueprint, render_template, redirect, url_for, request, flash,jsonify
 from flask_login import login_required, current_user
 from flask_login import LoginManager
 from clients_controller import app_db
@@ -8,15 +9,16 @@ import datetime
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
+
+host = os.environ.get('DB_HOST', 'localhost')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
+    user='user', password='Password-1234', database='vakcina', host=host)
+
 app.config['JSON_AS_ASCII'] = False
+
+
+
 app.register_blueprint(app_db)
-
-#TODO: переробити на mysql з sqllite
-# host = os.environ.get('DB_HOST', 'localhost')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
-#     user='user', password='password', database='vakcina', host=host)
-
 
 db.init_app(app)
 login_manager = LoginManager()
@@ -134,4 +136,4 @@ app.register_blueprint(blueprint, url_prefix="/")
 
 if __name__ == '__main__':
     db.create_all()
-    app.run(debug=True)
+    app.run(debug=True, port=4000)

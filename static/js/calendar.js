@@ -80,7 +80,7 @@ const getNotDoneVaccines = async (id) => {
 
 
 const initCalendar = async () => {
-    let current_user = await getJSON("/profile/current_user");
+    let current_user = await getJSON("/current_user");
     if (current_user.length === 0 || !current_user["id"]){
         return;
     }
