@@ -12,7 +12,13 @@
     <link rel="stylesheet" href="../static/style/home-blocks/Main-block.css">
     <link rel="stylesheet" href="../static/style/common-blocks/Header.css">
     <link rel="stylesheet" href="../static/style/common-blocks/Dropdown.css">
+    <link rel="stylesheet" href="../static/style/travel-blocks/Main-block__map.css">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel='stylesheet' type='text/css' href='../static/style/map.css'/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="{{ url_for('static', filename='js/tomtom.min.js') }}"></script>
+
     <title>У подорож</title>
 
 </head>
@@ -69,9 +75,12 @@
         </nav>
     </header>
     <main class="Main-block Layout__main-block">
-        <article class="Main-block__info-block" style="text-align: center; font-size: larger">
-            Ми працюємо над цією сторінкою</article>
+        <span class="Main-block__text">Натисніть на маркер країни, яку хочете відвідати, щоб дізнатися,
+            які прививки необхідно зробити для безпечної подорожі.</span>
+        <section class="Main-block__map" id="map"></section>
     </main>
 </div>
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/abroad.js') }}"></script>
 </body>
 </html>

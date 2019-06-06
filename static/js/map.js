@@ -1,8 +1,9 @@
 let map;
+let lviv_center = [49.840838, 24.028037];
 
 const setLocation = (loc, geo) => {
-    if (!geo.length) {
-        geo = [loc.coords.latitude, loc.coords.longitude];
+    if (!geo.length){
+        geo = [loc.coords.latitude, loc.coords.longitude]
     }
     map = tomtom.L.map('map', {
         key: 'Jvod0PUA0hjxGkT1AwIWJVdeGeV5pkr0',
@@ -12,35 +13,26 @@ const setLocation = (loc, geo) => {
     });
 };
 
+
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-        (loc) => {setLocation(loc, []);},
-        (loc) => {setLocation(loc, [49.840838, 24.028037])});
-} else {
-    setLocation([], [49.840838, 24.028037]);
+    navigator.geolocation.getCurrentPosition((loc) => {setLocation(loc, []);},
+        (loc) => {setLocation(loc, lviv_center)});
+} else{
+    setLocation("", lviv_center);
 }
-
-
-const isEmpty = (obj) => {
-    for(let key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-};
 
 
 const getCoordinates = async () => {
     let coors = await getJSON("/hospitals/" +
-        document.getElementById("Info-block__search-form-input").value);
+            document.getElementById("Info-block__search-form-input").value);
     if (isEmpty(coors)) return [];
     return (Array.isArray(coors) ? coors : [coors]);
 };
 
 
-const initMap = async () => {
+const reloadMap = async () => {
     let coordinates = await getCoordinates();
-
+    console.log(coordinates);
     document.getElementsByClassName("Search-form__text")[0].innerHTML =
         "Ми знайшли " + coordinates.length + " точок за вашим запитом.";
 

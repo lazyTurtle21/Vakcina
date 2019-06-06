@@ -16,7 +16,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 
 </head>
-<body>
+<body onload="initHistory();">
     <div class="Layout">
         <header class="Header Layout__header">
         <div class="Header__content">
@@ -70,8 +70,7 @@
     </header>
         <main class="Main-block Layout__main-block"></main>
     </div>
-
+    <script type="text/javascript" src="{{ url_for('static', filename='js/common.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/history.js')}}"></script>
-
 </body>
 </html>

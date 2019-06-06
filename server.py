@@ -5,14 +5,16 @@ from flask_login import LoginManager
 from clients_controller import app_db
 from models import Clients, ClientLog, app, db, VaccControl, Vaccines
 import datetime
+from models import Hospitals, AgeVaccination, VaccControl, PresenceIn
 
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 
-host = os.environ.get('DB_HOST', 'localhost')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
-    user='user', password='Password-1234', database='vakcina', host=host)
+# host = os.environ.get('DB_HOST', 'localhost')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
+#     user='client', password='Password-1234', database='vakcina', host=host)
+app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///vaccina.db'
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -66,6 +68,7 @@ def get_profile():
                       last_name=request.form.get('lastname'),
                       sex=request.form.get('sex'),
                       date_of_birth=request.form.get('date'), location=request.form.get('location'))
+        db.session.add(cli)
 
         for i in range(1, 11):
             if request.form.get('v{}'.format(i)) is not None:
@@ -76,13 +79,16 @@ def get_profile():
                                    vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
                                    date=datetime.date.today().isoformat())
                 db.session.add(vacc)
-        db.session.add(cli)
+
     else:
         cli.first_name = request.form.get('firstname')
         cli.last_name = request.form.get('lastname')
         cli.sex = request.form.get('sex')
         cli.date_of_birth = request.form.get('date')
         cli.location = request.form.get('location')
+        # for i in range(1, 11):
+        #     if request.form.get('v{}'.format(i)) is not None:
+        #         VaccControl.query.filter_by().delete()
     db.session.commit()
 
     if request.form.get('firstname') == '' or request.form.get('lastname') == '' or request.form.get(
@@ -93,11 +99,13 @@ def get_profile():
 
 
 @blueprint.route("/search")
+@login_required
 def home_map():
     return render_template("vaccine.html")
 
 
 @blueprint.route("/history")
+@login_required
 def history():
     return render_template("history.html")
 
@@ -134,6 +142,57 @@ app.register_blueprint(auth_blueprint)
 app.register_blueprint(main)
 app.register_blueprint(blueprint, url_prefix="/")
 
+def load_csv_age_vaccines():
+    with open(r'data/vacc_age.csv') as f:
+        line, lines = f.readline(), f.readlines()
+
+    for line in lines:
+        id, age = line.strip().split(sep=';')
+        db.session.add(AgeVaccination(vacc_id=int(id), age=float(age)))
+
+    db.session.commit()
+
+
+def load_csv_vaccines():
+    with open('data/vaccines.csv') as f:
+        line, lines = f.readline(), f.readlines()
+
+    for line in lines:
+        id, name = line.strip().split(sep=';')
+        db.session.add(Vaccines(vacc_id=int(id), name=name))
+
+    db.session.commit()
+
+
+def load_csv_hospitals():
+    with open('./data/hospitals.csv', encoding="utf-8") as f:
+        line, lines = f.readline(), f.readlines()
+
+    for line in lines:
+        id, name, address, longitude, latitude = line.strip().split(sep=';')
+        db.session.add(Hospitals(id=int(id), name=name, address=address, lon=longitude, lat=latitude))
+
+    db.session.commit()
+
+
+def load_csv_presence_in():
+    with open('./data/presence_in.csv') as f:
+        line, lines = f.readline(), f.readlines()
+
+    for line in lines:
+        hospital_id, vacc_id, num_present = line.strip().split(sep=';')
+        print(hospital_id)
+        db.session.add(PresenceIn(hospital_id=int(hospital_id), vacc_id=int(vacc_id), num_present=int(num_present)))
+
+    db.session.commit()
+
+
+
 if __name__ == '__main__':
     db.create_all()
+    # load_csv_age_vaccines()
+    # load_csv_hospitals()
+    # load_csv_presence_in()
+    # load_csv_age_vaccines()
+
     app.run(debug=True, port=4000)

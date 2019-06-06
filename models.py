@@ -41,7 +41,7 @@ class Clients(db.Model, DictMixin):
                     'location': self.location})
 
 
-class Vaccines(db.Model):
+class Vaccines(db.Model, DictMixin):
     __tablename__ = 'vaccines'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -51,7 +51,7 @@ class Vaccines(db.Model):
                     'name': self.name})
 
 
-class VaccControl(db.Model):
+class VaccControl(db.Model, DictMixin):
     __tablename__ = 'vacc_control'
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True, unique=False)
     vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True, unique=False)
@@ -61,33 +61,6 @@ class VaccControl(db.Model):
         return str({'client_id': self.client_id,
                     'vacc_id': self.vacc_id,
                     "date": self.date})
-
-
-class DictMixin(object):
-    def asdict(self):
-        return dict((col.name, getattr(self, col.name))
-                    for col in class_mapper(self.__class__).mapped_table.c)
-
-
-# class Clients(db.Model, DictMixin):
-#     __tablename__ = 'clients'
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-#     email = db.Column(db.String(255), nullable=False)
-#     first_name = db.Column(db.String(255), nullable=False)
-#     last_name = db.Column(db.String(255), nullable=False)
-#     sex = db.Column(db.Integer, nullable=False)
-#     date_of_birth = db.Column(db.String(255), nullable=False)
-#     location = db.Column(db.String(255), nullable=False)
-#
-#     def __repr__(self):
-#         return str({'id': self.id,
-#                     'authentification_key': self.authentification_key,
-#                     'email': self.email,
-#                     'first_name': self.first_name,
-#                     'last_name': self.last_name,
-#                     'sex': self.sex,
-#                     'date_of_birth': self.date_of_birth,
-#                     'location': self.location})
 
 
 class Additional(db.Model, DictMixin):

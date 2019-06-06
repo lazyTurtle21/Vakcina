@@ -1,27 +1,14 @@
-const getJSON = async (link) => {
-    return fetch(link)
-        .then((response)=>response.json())
-        .then((responseJson)=>{return responseJson});
-};
-
-const ConvertToDMY = (date) => {
-    let split_date = date.split('-');
-    return new Date(split_date[0] + '/' + split_date[1] + '/' + split_date[2]);
-};
-
-const compareDates = (date1, date2) =>{
-    if (date1 > date2){return 1;}
-    if (date1 < date2){return -1;}
-    return 0;
-};
-
 const getDoneVaccines = async (id) => {
     let vaccines_done = await getJSON("/vacc_control/" + id.toString());
-    let vaccines_age = await getJSON("/age_vaccination");
-    return vaccines_age.filter(x => vaccines_done.find(el => el["id"] === x["id"])["is_done"]);
+    // let vaccines_age = await getJSON("/age_vaccination");
+    // return vaccines_age.filter(x => vaccines_done.find(el => el["id"] === x["id"])["is_done"]);
+    if (vaccines_done){
+        return vaccines_done.filter(x => x["is_done"]);
+    }
+    return [];
 };
 
-const getDate = (months, birth_date)  => {
+const getFutureDate = (months, birth_date)  => {
     birth_date.setMonth(birth_date.getMonth() + months);
     if (new Date() < birth_date){
         return false;
@@ -72,11 +59,16 @@ const GetFullPost = async (year, data) => {
 
     document.querySelector(".Main-block").appendChild(el);
 
-    console.log(year);
+    // console.log(year);
 
     const historyContainer = document.querySelector("#Year-" + year);
     data.map(post_data => historyContainer.appendChild(GetOnePost(post_data)));
 
+};
+
+
+const getVaccNameByID = async (id, link) => {
+    return await getJSON(link + id.toString());
 };
 
 
@@ -85,17 +77,18 @@ const initHistory = async () => {
     if (current_user.length === 0 || !current_user["id"]){
         return;
     }
-    let client = await getJSON("/clients/" + current_user["id"].toString());
-    if (client.length === 0 || !client["date_of_birth"]){
-        return;
-    }
+    // let client = await getJSON("/clients/" + current_user["id"].toString());
+    // if (client.length === 0 || !client["date_of_birth"]){
+    //     return;
+    // }
 
     let client_id = current_user["id"];
-    let client_birth = client["date_of_birth"];
+    // let client_birth = client["date_of_birth"];
 
     let vaccines = await getDoneVaccines(client_id);
-    vaccines.map(x => {x["age"] = getDate(x["age"], ConvertToDMY(client_birth))});
-    vaccines = vaccines.filter(x => x["age"]);
+    vaccines.map(x => new Date(ConvertToSlash(x["date"])));
+    // vaccines.map(x => {x["age"] = getFutureDate(x["age"], ConvertToDMY(client_birth))});
+    // vaccines = vaccines.filter(x => x["age"]);
     vaccines.sort((x, y) => {return compareDates(x["age"], y["age"]);});
 
     let today = new Date();
@@ -105,6 +98,12 @@ const initHistory = async () => {
     if (current_year_events.length !== 0){
         GetFullPost(today.getFullYear(), current_year_events);
     }
+
+    other_years_events.map(x => {return getVaccNameByID(x["vacc_id"], "/vaccines/")});
+    current_year_events.map(x => {return getVaccNameByID(x["vacc_id"], "/vaccines/")});
+    other_years_events.sort((x, y) => {return compareDates(x["age"], y["age"]);});
+    current_year_events.sort((x, y) => {return compareDates(x["age"], y["age"]);});
+
 
     if (other_years_events.length !== 0){
         let first_event = other_years_events[other_years_events.length - 1]["age"].getFullYear().toString();
@@ -126,5 +125,3 @@ const initHistory = async () => {
 
 };
 
-
-initHistory();
