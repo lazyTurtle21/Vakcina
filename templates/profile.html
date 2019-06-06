@@ -82,9 +82,9 @@
                     <input type="text" id="lname" name="lastname" value={{ client.last_name}}>
                     <label for="sex" >Стать</label>
                     <select id="sex" name="sex" >
-                        <option value="1">Жінка</option>
-                        <option value="0">Чоловік</option>
-                        <option value="2">Інше</option>
+                        <option value="1" {% if  client.sex== 1 %}selected{% endif %} >Жінка</option>
+                        <option value="0" {% if  client.sex== 0 %}selected{% endif %}>Чоловік</option>
+                        <option value="2" {% if  client.sex== 2 %}selected{% endif %}>Інше</option>
                     </select>
                     <label for="loc">Місто  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
                     <input type="text" id="loc" name="location" value={{ client.location}}>

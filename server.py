@@ -10,9 +10,10 @@ main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 
-host = os.environ.get('DB_HOST', 'localhost')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
-    user='user', password='Password-1234', database='vakcina', host=host)
+# host = os.environ.get('DB_HOST', 'localhost')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
+#     user='client', password='Password-1234', database='vakcina', host=host)
+app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///vaccina.db'
 
 app.config['JSON_AS_ASCII'] = False
 
@@ -66,6 +67,7 @@ def get_profile():
                       last_name=request.form.get('lastname'),
                       sex=request.form.get('sex'),
                       date_of_birth=request.form.get('date'), location=request.form.get('location'))
+        db.session.add(cli)
 
         for i in range(1, 11):
             if request.form.get('v{}'.format(i)) is not None:
@@ -76,13 +78,16 @@ def get_profile():
                                    vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
                                    date=datetime.date.today().isoformat())
                 db.session.add(vacc)
-        db.session.add(cli)
+
     else:
         cli.first_name = request.form.get('firstname')
         cli.last_name = request.form.get('lastname')
         cli.sex = request.form.get('sex')
         cli.date_of_birth = request.form.get('date')
         cli.location = request.form.get('location')
+        # for i in range(1, 11):
+        #     if request.form.get('v{}'.format(i)) is not None:
+        #         VaccControl.query.filter_by().delete()
     db.session.commit()
 
     if request.form.get('firstname') == '' or request.form.get('lastname') == '' or request.form.get(
@@ -93,11 +98,13 @@ def get_profile():
 
 
 @blueprint.route("/search")
+@login_required
 def home_map():
     return render_template("vaccine.html")
 
 
 @blueprint.route("/history")
+@login_required
 def history():
     return render_template("history.html")
 
