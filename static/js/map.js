@@ -1,5 +1,7 @@
 let map;
 let lviv_center = [49.840838, 24.028037];
+let markers = [];
+
 
 const setLocation = (loc, geo) => {
     if (!geo.length){
@@ -37,9 +39,9 @@ const reloadMap = async () => {
     let coordinates = await getCoordinates();
     document.getElementsByClassName("Search-form__text")[0].innerHTML =
         "Ми знайшли " + coordinates.length + " точок за вашим запитом.";
-
-    coordinates.map((x) => tomtom.L.marker([x["lon"], x["lat"]]).addTo(map).bindPopup(
-         x["name"] + ', ' + x["address"] + ", в навності: " + x["num_present"] + " вакцин"));
+    markers.map(x => x.remove());
+    coordinates.map((x) => {markers.push(tomtom.L.marker([x["lon"], x["lat"]]).addTo(map)); markers[markers.length - 1].bindPopup(
+         x["name"] + ', ' + x["address"] + ", в навності: " + x["num_present"] + " вакцин")});
 
     // coordinates.map((x) => tomtom.L.marker([x["lon"], x["lat"]]).addTo(map).bindPopup(x["name"]));
 };

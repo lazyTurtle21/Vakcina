@@ -34,8 +34,7 @@ const addVaccine = async (id) => {
 };
 
 
-let vaccines=["Гепатит B", "Дифтерія", "Кашлюк", "Правець", "Поліомієліт", "Гемофільна інфекція",
-    "Кір",
+let vaccines=["Гепатит B", "Дифтерія", "Кашлюк", "Правець", "Поліомієліт", "Гемофільна інфекція", "Кір",
     "Краснуха",
     "Паротит",
     "Туберкульоз",
@@ -74,7 +73,7 @@ const differenceDate = (date) => {
     return "Вже!";
 };
 
-const postDate = (data, id) => {
+const postDate = (data) => {
     const el = document.createElement("section");
     el.innerHTML = `
                     <section class="Summary-block__content-cell">

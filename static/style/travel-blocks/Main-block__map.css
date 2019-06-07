@@ -1,9 +1,9 @@
 .Main-block__map{
-    margin-top: 40px;
+    margin-top: 30px;
     grid-column-start: 4;
     grid-column-end: 15;
     width: calc(10 * 90px);
-    height: 550px;
+    height: 500px;
 }
 
 .Main-block__text{
