@@ -3,8 +3,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import login_required, current_user
 from flask_login import LoginManager
 from clients_controller import app_db
-from models import Clients, ClientLog, app, db, VaccControl, Vaccines, AgeVaccination
+from models import Clients, ClientLog, app, db, VaccControl, Vaccines
 import datetime
+from random import randint
 
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -51,14 +52,12 @@ def get_current_user():
 @login_required
 def profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
+    print(VaccControl.query.all())
+    print(current_user.id)
     return render_template('profile.html', client=cli, vaccs=[l.name for l in
                                                               db.session.query(Vaccines).join(VaccControl).filter_by(
                                                                   client_id=current_user.id).filter_by(
-                                                                  is_done=True).filter().all()])
-
-
-
-
+                                                                  is_done=True).all()])
 
 
 @main.route('/profile', methods=['POST'])
@@ -71,7 +70,6 @@ def get_profile():
                       sex=request.form.get('sex'),
                       date_of_birth=request.form.get('date'), location=request.form.get('location'))
         db.session.add(cli)
-        add_vaccs()
 
         for i in range(1, 11):
             if request.form.get('v{}'.format(i)) is not None:
@@ -80,7 +78,8 @@ def get_profile():
 
                 vacc = VaccControl(client_id=current_user.id,
                                    vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
-                                   date=datetime.date.today().isoformat(), is_done=True)
+                                   date=(datetime.date.today() - datetime.timedelta(
+                                       days=(730 - randint(1, 730)))).isoformat(), is_done=True)
                 db.session.add(vacc)
 
     else:
@@ -158,29 +157,6 @@ from auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(main)
 app.register_blueprint(blueprint, url_prefix="/")
-
-
-def add_months(date_str, months):
-    date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-    month = date_obj.month - 1 + months
-    year = date_obj.year + month // 12
-    month = month % 12 + 1
-    return datetime.date(year, month, date_obj.day)
-
-
-def resolve_month(birth_str, date_obj):
-    birth_obj = datetime.datetime.strptime(birth_str, "%Y-%m-%d")
-    return (date_obj.year - birth_obj.year) * 12 + date_obj.month - birth_obj.month
-
-def add_vaccs():
-    cli = Clients.query.filter_by(id=current_user.id).first()
-    vaccs = db.session.query(AgeVaccination).filter(
-        AgeVaccination.age.between(0, resolve_month(cli.date_of_birth, datetime.date.today()))).join(Vaccines).all()
-    for i in vaccs:
-        db.session.add(VaccControl(client_id=current_user.id,
-                                   vacc_id=Vaccines.query.filter_by(id=i.vacc_id).first().id,
-                                   date=add_months(cli.date_of_birth, int(i.age)), is_done=True))
-
 
 if __name__ == '__main__':
     db.create_all()
