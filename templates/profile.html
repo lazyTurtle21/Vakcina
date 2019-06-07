@@ -80,6 +80,9 @@
                     <input type="text" id="fname" name="firstname" value={{ client.first_name}}>
                     <label for="lname">Прізвище  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
                     <input type="text" id="lname" name="lastname" value={{ client.last_name}}>
+                             <label for="login">Логін {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
+                    <input type="text" id="login" name="username" value={{username}}>
+
                     <label for="sex" >Стать</label>
                     <select id="sex" name="sex" >
                         <option value="1" {% if  client.sex== 1 %}selected{% endif %} >Жінка</option>
@@ -91,8 +94,7 @@
                     <label for="dat">Дата народження  {% if messages %}<div class="message" style="color: #ec5643;display: inline;max-width: 309px;" >{{ messages[0] }}</div>{% endif %}</label>
 
                     <input type="date" id="dat" name="date" value={{ client.date_of_birth}}>
-                    <label for="alerg">Алергії</label>
-                    <input type="text" id="alerg" name="alergies">
+
                     {% if messages %} <div class="message" style="color: #ec5643;display: flex;max-width: 309px;" > * Обов'язкове поле </div>{% endif %}
                     <input type="submit" value="Зберегти">
                     {% endwith %}

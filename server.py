@@ -54,9 +54,8 @@ def get_current_user():
 @login_required
 def profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
-    print(VaccControl.query.all())
-    print(current_user.id)
-    return render_template('profile.html', client=cli, vaccs=[l.name for l in
+    l_name = ClientLog.query.filter_by(id=current_user.id).first()
+    return render_template('profile.html', client=cli, username=l_name.name , vaccs=[l.name for l in
                                                               db.session.query(Vaccines).join(VaccControl).filter_by(
                                                                   client_id=current_user.id).filter_by(
                                                                   is_done=True).all()])
@@ -65,6 +64,7 @@ def profile():
 @main.route('/profile', methods=['POST'])
 def get_profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
+    username = ClientLog.query.filter_by(id=current_user.id).first()
 
     if cli is None:
         cli = Clients(id=current_user.id, first_name=request.form.get('firstname'),
@@ -91,6 +91,7 @@ def get_profile():
         cli.sex = request.form.get('sex')
         cli.date_of_birth = request.form.get('date')
         cli.location = request.form.get('location')
+        username.name = request.form.get('username')
         for i in range(1, 11):
             if request.form.get('v{}'.format(i)) is None:
                 temp = db.session.query(VaccControl).filter_by(client_id=current_user.id).filter_by(is_done=True).join(
@@ -111,7 +112,7 @@ def get_profile():
     db.session.commit()
 
     if request.form.get('firstname') == '' or request.form.get('lastname') == '' or request.form.get(
-            'date') == '' or request.form.get('location') == '':
+            'date') == '' or request.form.get('location') == '' or request.form.get('username')== '':
         flash("*")
         return redirect(url_for('main.profile'))
     return redirect(url_for('main.home'))

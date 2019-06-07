@@ -186,12 +186,6 @@ def add_presence_in():
     return jsonify(result)
 
 
-@app_db.route('/abroad/<string:country>', methods=['GET'])
-def get_country(country):
-    print(country)
-    country = models.ForeignCountries.query.filter_by(name=counts[country]).all()
-    result = [c.asdict() for c in country]
-    return jsonify(result)
 
 
 if __name__ == "__main__":
