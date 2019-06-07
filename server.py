@@ -41,13 +41,6 @@ def index():
 @main.route("/home")
 @login_required
 def home():
-
-
-    # lst = ['Черевний тиф','Сказ','Жовта лихоманка','Віспа']
-    # for i in lst:
-    #     db.session.add(Vaccines(name=i))
-    # db.session.commit()
-
     return render_template('home.html')
 
 
