@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import login_required, current_user
 from flask_login import LoginManager
 from clients_controller import app_db
-from models import Clients, ClientLog, app, db, VaccControl, Vaccines
+from models import Clients, ClientLog, app, db, VaccControl, Vaccines, ForeignCountries
 import datetime
 from random import randint
 
@@ -33,12 +33,21 @@ blueprint = Blueprint("", __name__)
 @main.route("/")
 @login_required
 def index():
+
     return redirect(url_for('main.home'))
+
 
 
 @main.route("/home")
 @login_required
 def home():
+
+
+    # lst = ['Черевний тиф','Сказ','Жовта лихоманка','Віспа']
+    # for i in lst:
+    #     db.session.add(Vaccines(name=i))
+    # db.session.commit()
+
     return render_template('home.html')
 
 
@@ -161,5 +170,4 @@ app.register_blueprint(blueprint, url_prefix="/")
 
 if __name__ == '__main__':
     db.create_all()
-    print(VaccControl.query.all())
     app.run(debug=True, port=4000)

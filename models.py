@@ -139,6 +139,14 @@ class PresenceIn(db.Model, DictMixin):
                     'vacc_id': self.vacc_id,
                     'num_present': self.num_present})
 
+class ForeignCountries(db.Model, DictMixin):
+    name = db.Column(db.String, primary_key=True)
+    vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True)
+
+    def repr(self):
+        return str({'name': self.name,
+                    'vacc_id': self.vacc_id})
+
 # class Medicines(db.Model, DictMixin):
 #     id = db.Column(db.Integer, primary_key=True)
 #     name = db.Column(db.String(255), nullable=False)
