@@ -72,15 +72,16 @@ def get_profile():
         db.session.add(cli)
 
         for i in range(1, 11):
-            if request.form.get('v{}'.format(i)) is not None:
-                # v = Vaccines(name=request.form.get('v{}'.format(i)))
-                # db.session.add(v)
+            # if request.form.get('v{}'.format(i)) is not None:
+            #     v = Vaccines(name=request.form.get('v{}'.format(i)))
+            #     db.session.add(v)
+            vacc = VaccControl(client_id=current_user.id,
+                               vacc_id=Vaccines.query.filter_by(id=i).first().id,
+                               date=(datetime.date.today() - datetime.timedelta(
+                                   days=(730 - randint(1, 730)))).isoformat(),
+                               is_done=True if request.form.get('v{}'.format(i)) is not None else False)
 
-                vacc = VaccControl(client_id=current_user.id,
-                                   vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
-                                   date=(datetime.date.today() - datetime.timedelta(
-                                       days=(730 - randint(1, 730)))).isoformat(), is_done=True)
-                db.session.add(vacc)
+            db.session.add(vacc)
 
     else:
         cli.first_name = request.form.get('firstname')
@@ -160,4 +161,5 @@ app.register_blueprint(blueprint, url_prefix="/")
 
 if __name__ == '__main__':
     db.create_all()
+    print(VaccControl.query.all())
     app.run(debug=True, port=4000)
