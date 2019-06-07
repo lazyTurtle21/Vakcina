@@ -27,6 +27,13 @@ def get_client(id):
     return jsonify(result)
 
 
+counts = {
+    "Thailand" : "Тайланд",
+    "India": "Індія",
+    "Australia": "Австралія",
+    "Mexico": "Мексика",
+}
+
 @app_db.route('/clients/', methods=['POST'])
 def add_client():
     cjson = request.get_json()
@@ -101,11 +108,27 @@ def get_client_vacc_control(client_id):
     return jsonify(result)
 
 
+@app_db.route('/vacc_control/', methods=['PUT'])
+def update_client_vacc_control():
+    vac_control_json = request.get_json()
+    client_id = vac_control_json["client_id"]
+    vacc_control = models.VaccControl.query.filter_by(client_id=int(client_id),
+                                                      vacc_id=int(vac_control_json["vacc_id"])).first()
+    print(vacc_control.is_done)
+    vacc_control.is_done = vac_control_json["is_done"]
+    vacc_control.date = vac_control_json["date"]
+    print(vacc_control.is_done)
+
+    db.session.commit()
+    return jsonify({})
+
+
+
 @app_db.route('/vacc_control/', methods=['POST'])
 def add_vac_control():
     vac_control_json = request.get_json()
     vac_control = models.VaccControl(client_id=vac_control_json["client_id"], vacc_id=vac_control_json["vacc_id"],
-                                   is_done=vac_control_json["is_done"])
+                                     date=vac_control_json["date"], is_done=vac_control_json["is_done"])
     db.session.add(vac_control)
     db.session.commit()
     result = vac_control.asdict()
@@ -129,19 +152,25 @@ def get_hospital_by_vacc(vacc_name):
     if not vacc_id:
         return jsonify({})
     vacc_id = vacc_id.asdict()['id']
+    print("vacc, ", vacc_id)
     hospitals_with_vac1 = models.PresenceIn.query.filter_by(vacc_id=vacc_id).all()
     hospitals_with_vac2 = [i.asdict() for i in hospitals_with_vac1]
+    print(hospitals_with_vac2)
+    # for hosp in hospitals_with_vac2:
+    #     if hosp["num_present"] < 1:
+    #         del hospitals_with_vac2[hospitals_with_vac2.index(hosp)]
 
-    for hosp in hospitals_with_vac2:
-        if hosp["num_present"] < 1:
-            del hospitals_with_vac2[hospitals_with_vac2.index(hosp)]
-
+    for i in range(1, 12):
+        print(models.Hospitals.query.filter_by(id=i).all())
     hospitals = []
     for h in hospitals_with_vac2:
-        hospital = models.Hospitals.query.filter_by(id=h["hospital_id"]).first().asdict()
-        hospital["num_present"] = h["num_present"]
-        del hospital["id"]
-        hospitals.append(hospital)
+        hospital = models.Hospitals.query.filter_by(id=h["hospital_id"]).first()
+        print(hospital)
+        if hospital:
+            hospital = hospital.asdict()
+            hospital["num_present"] = int(h["num_present"])
+            del hospital["id"]
+            hospitals.append(hospital)
 
     return jsonify(hospitals)
 
@@ -154,6 +183,14 @@ def add_presence_in():
     db.session.add(presence_in)
     db.session.commit()
     result = presence_in.asdict()
+    return jsonify(result)
+
+
+@app_db.route('/abroad/<string:country>', methods=['GET'])
+def get_country(country):
+    print(country)
+    country = models.ForeignCountries.query.filter_by(name=counts[country]).all()
+    result = [c.asdict() for c in country]
     return jsonify(result)
 
 

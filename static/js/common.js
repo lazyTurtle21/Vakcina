@@ -7,8 +7,8 @@ const isEmpty = (obj) => {
 };
 
 const getJSON = async (link) => {
-    return fetch(link)
-        .then((response)=>response.json())
+    return await fetch(link)
+        .then( (response)=>  response.json())
         .then((responseJson)=>{return responseJson});
 };
 
@@ -20,8 +20,8 @@ const ConvertToDMY = (date) => {
 };
 
 const compareDates = (date1, date2) =>{
-    if (date1 > date2){return 1;}
-    if (date1 < date2){return -1;}
+    if (date1 > date2){return -1;}
+    if (date1 < date2){return 1;}
     return 0;
 };
 

@@ -21,10 +21,13 @@ if (navigator.geolocation) {
     setLocation("", lviv_center);
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
 
 const getCoordinates = async () => {
     let coors = await getJSON("/hospitals/" +
-            document.getElementById("Info-block__search-form-input").value);
+        capitalizeFirstLetter(document.getElementById("Info-block__search-form-input").value));
     if (isEmpty(coors)) return [];
     return (Array.isArray(coors) ? coors : [coors]);
 };
@@ -32,13 +35,12 @@ const getCoordinates = async () => {
 
 const reloadMap = async () => {
     let coordinates = await getCoordinates();
-    console.log(coordinates);
     document.getElementsByClassName("Search-form__text")[0].innerHTML =
         "Ми знайшли " + coordinates.length + " точок за вашим запитом.";
 
     coordinates.map((x) => tomtom.L.marker([x["lon"], x["lat"]]).addTo(map).bindPopup(
-        + x["name"] + '\n' + x["address"] + "\nКількість вакцин: " + x["num_present"]));
+         x["name"] + ', ' + x["address"] + ", в навності: " + x["num_present"] + " вакцин"));
 
-    coordinates.map((x) => tomtom.L.marker([x["lon"], x["lat"]]).addTo(map).bindPopup(x["name"]));
+    // coordinates.map((x) => tomtom.L.marker([x["lon"], x["lat"]]).addTo(map).bindPopup(x["name"]));
 };
 

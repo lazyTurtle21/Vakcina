@@ -1,11 +1,11 @@
-import os
-from flask import Blueprint, render_template, redirect, url_for, request, flash,jsonify
+# import os
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user
 from flask_login import LoginManager
 from clients_controller import app_db
-from models import Clients, ClientLog, app, db, VaccControl, Vaccines
+from models import Clients, ClientLog, app, db, VaccControl, Vaccines, ForeignCountries, PresenceIn,Hospitals
 import datetime
-from models import Hospitals, AgeVaccination, VaccControl, PresenceIn
+from random import randint
 
 main = Blueprint('main', __name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -14,11 +14,9 @@ app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
 # host = os.environ.get('DB_HOST', 'localhost')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://{user}:{password}@{host}/{database}'.format(
 #     user='client', password='Password-1234', database='vakcina', host=host)
-app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///vaccina.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vaccina.db'
 
 app.config['JSON_AS_ASCII'] = False
-
-
 
 app.register_blueprint(app_db)
 
@@ -35,7 +33,9 @@ blueprint = Blueprint("", __name__)
 @main.route("/")
 @login_required
 def index():
+
     return redirect(url_for('main.home'))
+
 
 
 @main.route("/home")
@@ -54,9 +54,12 @@ def get_current_user():
 @login_required
 def profile():
     cli = Clients.query.filter_by(id=current_user.id).first()
+    print(VaccControl.query.all())
+    print(current_user.id)
     return render_template('profile.html', client=cli, vaccs=[l.name for l in
                                                               db.session.query(Vaccines).join(VaccControl).filter_by(
-                                                                  client_id=current_user.id).all()])
+                                                                  client_id=current_user.id).filter_by(
+                                                                  is_done=True).all()])
 
 
 @main.route('/profile', methods=['POST'])
@@ -71,14 +74,16 @@ def get_profile():
         db.session.add(cli)
 
         for i in range(1, 11):
-            if request.form.get('v{}'.format(i)) is not None:
-                # v = Vaccines(name=request.form.get('v{}'.format(i)))
-                # db.session.add(v)
+            # if request.form.get('v{}'.format(i)) is not None:
+            #     v = Vaccines(name=request.form.get('v{}'.format(i)))
+            #     db.session.add(v)
+            vacc = VaccControl(client_id=current_user.id,
+                               vacc_id=Vaccines.query.filter_by(id=i).first().id,
+                               date=(datetime.date.today() - datetime.timedelta(
+                                   days=(730 - randint(1, 730)))).isoformat(),
+                               is_done=True if request.form.get('v{}'.format(i)) is not None else False)
 
-                vacc = VaccControl(client_id=current_user.id,
-                                   vacc_id=Vaccines.query.filter_by(name=request.form.get('v{}'.format(i))).first().id,
-                                   date=datetime.date.today().isoformat())
-                db.session.add(vacc)
+            db.session.add(vacc)
 
     else:
         cli.first_name = request.form.get('firstname')
@@ -86,9 +91,23 @@ def get_profile():
         cli.sex = request.form.get('sex')
         cli.date_of_birth = request.form.get('date')
         cli.location = request.form.get('location')
-        # for i in range(1, 11):
-        #     if request.form.get('v{}'.format(i)) is not None:
-        #         VaccControl.query.filter_by().delete()
+        for i in range(1, 11):
+            if request.form.get('v{}'.format(i)) is None:
+                temp = db.session.query(VaccControl).filter_by(client_id=current_user.id).filter_by(is_done=True).join(
+                    Vaccines).filter_by(id=i).first()
+                if temp is not None:
+                    temp.is_done = False
+            else:
+                temp = db.session.query(VaccControl).filter_by(client_id=current_user.id).join(
+                    Vaccines).filter_by(id=i).first()
+                if temp is not None:
+                    temp.is_done = True
+                else:
+                    db.session.add(VaccControl(client_id=current_user.id,
+                                               vacc_id=Vaccines.query.filter_by(
+                                                   name=request.form.get('v{}'.format(i))).first().id,
+                                               date=datetime.date.today().isoformat(), is_done=True))
+
     db.session.commit()
 
     if request.form.get('firstname') == '' or request.form.get('lastname') == '' or request.form.get(
@@ -142,6 +161,8 @@ app.register_blueprint(auth_blueprint)
 app.register_blueprint(main)
 app.register_blueprint(blueprint, url_prefix="/")
 
+
+
 def load_csv_age_vaccines():
     with open(r'data/vacc_age.csv') as f:
         line, lines = f.readline(), f.readlines()
@@ -159,7 +180,7 @@ def load_csv_vaccines():
 
     for line in lines:
         id, name = line.strip().split(sep=';')
-        db.session.add(Vaccines(vacc_id=int(id), name=name))
+        db.session.add(Vaccines(id=int(id), name=name))
 
     db.session.commit()
 
@@ -170,7 +191,10 @@ def load_csv_hospitals():
 
     for line in lines:
         id, name, address, longitude, latitude = line.strip().split(sep=';')
-        db.session.add(Hospitals(id=int(id), name=name, address=address, lon=longitude, lat=latitude))
+        cli = Hospitals.query.filter_by(id=int(id)).first()
+        print(id, cli)
+        if not cli:
+            db.session.add(Hospitals(id=int(id), name=name, address=address, lon=longitude, lat=latitude))
 
     db.session.commit()
 
@@ -181,18 +205,35 @@ def load_csv_presence_in():
 
     for line in lines:
         hospital_id, vacc_id, num_present = line.strip().split(sep=';')
-        print(hospital_id)
-        db.session.add(PresenceIn(hospital_id=int(hospital_id), vacc_id=int(vacc_id), num_present=int(num_present)))
+        cli = PresenceIn.query.filter_by(hospital_id=int(hospital_id), vacc_id=int(vacc_id)).all()
+        print(hospital_id, cli)
+
+        if not cli:
+            db.session.add(PresenceIn(hospital_id=int(hospital_id), vacc_id=int(vacc_id), num_present=int(num_present)))
 
     db.session.commit()
 
 
+def load_csv_abroad():
+    with open('./data/abroad.csv') as f:
+        line, lines = f.readline(), f.readlines()
+
+    for line in lines:
+        name, vacc_id = line.strip().split(sep=',')
+        cli = ForeignCountries.query.filter_by(name=name, vacc_id=int(vacc_id))
+        if not cli:
+            db.session.add(ForeignCountries(name=name, vacc_id=int(vacc_id)))
+
+    db.session.commit()
+
 
 if __name__ == '__main__':
     db.create_all()
-    # load_csv_age_vaccines()
+    # load_csv_abroad()
     # load_csv_hospitals()
-    # load_csv_presence_in()
-    # load_csv_age_vaccines()
 
+    # load_csv_vaccines()
+    # load_csv_age_vaccines()
+    # load_csv_presence_in()
+    load_csv_hospitals()
     app.run(debug=True, port=4000)

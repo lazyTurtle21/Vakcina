@@ -56,11 +56,13 @@ class VaccControl(db.Model, DictMixin):
     client_id = db.Column(db.Integer, db.ForeignKey('clients.id'), primary_key=True, unique=False)
     vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True, unique=False)
     date = db.Column(db.String(15), primary_key=True)
+    is_done = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
         return str({'client_id': self.client_id,
                     'vacc_id': self.vacc_id,
-                    "date": self.date})
+                    "date": self.date,
+                    'is_done': self.is_done})
 
 
 class Additional(db.Model, DictMixin):
@@ -109,6 +111,15 @@ class PresenceIn(db.Model, DictMixin):
         return str({'hospital_id': self.hospital_id,
                     'vacc_id': self.vacc_id,
                     'num_present': self.num_present})
+
+
+class ForeignCountries(db.Model, DictMixin):
+    name = db.Column(db.String, primary_key=True)
+    vacc_id = db.Column(db.Integer, db.ForeignKey('vaccines.id'), primary_key=True)
+
+    def __repr__(self):
+        return str({'name': self.name,
+                    'vacc_id': self.vacc_id})
 
 
 # class Medicines(db.Model, DictMixin):
