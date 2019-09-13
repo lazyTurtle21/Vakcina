@@ -16,21 +16,6 @@ const addVaccine = async (id) => {
         .then((responseJson) => {
             return responseJson
         });
-
-    // return await fetch("/vacc_control/", {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //         "client_id": curr_user["id"], "vacc_id": id, "date": date.getFullYear() + "-"
-    //             + date.getMonth() + "-" + date.getMonth(), "is_done":true
-    //     })
-    // }).then((response) => response.json())
-    //     .then((responseJson) => {
-    //         return responseJson
-    //     });
 };
 
 
@@ -122,8 +107,8 @@ const getNotDoneVaccines = async (id) => {
     // let vaccines_age = await getJSON("/age_vaccination");
 
     if (vaccines_done) {
-        vaccines_done =  vaccines_done.filter(x => {return !x["is_done"]});
-        return vaccines_done;
+        vaccines_not_done =  vaccines_done.filter(x => {return !x["is_done"]});
+        return vaccines_not_done;
         // return vaccines_done.filter(x => !vaccines_done.find(el => el["vacc_id"] === x["vacc_id"])["is_done"]);
     }
     return [];
@@ -135,10 +120,6 @@ const initCalendar = async () => {
     if (current_user.length === 0 || !current_user["id"]) {
         return;
     }
-    // let client = await getJSON("/clients/" + current_user["id"].toString());
-    // if (client.length === 0 || !client["date_of_birth"]) {
-    //     return;
-    // }
 
     let client_id = current_user["id"];
 
